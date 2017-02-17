@@ -45,9 +45,6 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
 
-.LINK
-https://dbatools.io/Set-DbaSpn
-
 .EXAMPLE
 .\Update-GoogleDynamicDNS.ps1 -generatedUserID userid -generatedPassword password -domainName yourdomain.com -subdomainName www
 Sends a HTTPS POST request to the Google dynamic DNS API using the userid and password credentials to set the subdomain 'www' (www.yourdomain.com) to the host's public IP
