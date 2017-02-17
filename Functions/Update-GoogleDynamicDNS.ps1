@@ -5,9 +5,7 @@ Function Update-GoogleDynamicDNS
 Sends a HTTPS POST request to the Google domain service to update a dynamic DNS entry
 
 .DESCRIPTION
-This function will send a POST request to the Google domains HTTPS API and set the active IP for a hostname on a given DNS entry. It accomplishes this
-via a Invoke-WebRequest to a URI and passes in parameters that are set by the user. This function will return an object containing the completed request from
-the HTTPS POST. For detailed messages on successful requests, you can use the -Verbose switch.
+This function will send a POST request to the Google domains HTTPS API and set the active IP for a hostname on a given DNS entry. It accomplishes this via a Invoke-WebRequest to a URI and passes in parameters that are set by the user. This function will return an object containing the completed equest fromthe HTTPS POST. For detailed messages on successful requests, you can use the -Verbose switch.
 
 .PARAMETER Credential
 A PSCredential object containing your Dynamic DNS generated credentials from Google.
