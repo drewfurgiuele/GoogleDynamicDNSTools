@@ -10,9 +10,6 @@ This function will send a POST request to the Google domains HTTPS API and set t
 .PARAMETER Credential
 A PSCredential object containing your Dynamic DNS generated credentials from Google.
 
-.PARAMETER GeneratedUserID
-If you don't want to use a PSCredential object and instead pass in the UserID, you can use this parameter.
-
 .PARAMETER GeneratedPassword
 If you don't want to use a PSCredential object and instead pass in the Password in the clear, you can use this parameter.
 
@@ -44,30 +41,24 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.
 
 .EXAMPLE
-.\Update-GoogleDynamicDNS.ps1 -generatedUserID userid -generatedPassword password -domainName yourdomain.com -subdomainName www
-Sends a HTTPS POST request to the Google dynamic DNS API using the userid and password credentials to set the subdomain 'www' (www.yourdomain.com) to the host's public IP
+Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www
+Sends a HTTPS POST request to the Google dynamic DNS API using a PSCredential object to set the subdomain 'www' (www.yourdomain.com) to the public IP of the host sending the request
 
-.EXAMPLE
-.\Update-GoogleDynamicDNS.ps1 -generatedUserID userid -generatedPassword password -domainName yourdomain.com -subdomainName www -IP 1.1.1.1
-Sends a HTTPS POST request to the Google dynamic DNS API using the userid and password credentials to set the subdomain 'www' (www.yourdomain.com) to 1.1.1.1
-
-.EXAMPLE
-.\Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -IP 1.1.1.1
+Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -IP 1.1.1.1
 Sends a HTTPS POST request to the Google dynamic DNS API using a PSCredential object to set the subdomain 'www' (www.yourdomain.com) to 1.1.1.1
 
-.\Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -Offline
+Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -Offline
 Sends a HTTPS POST request to the Google dynamic DNS API using a PSCredential object to set the subdomain 'www' offline
 
-.\Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -Online
+Update-GoogleDynamicDNS.ps1 -Credential $Credential -domainName yourdomain.com -subdomainName www -Online
 Sends a HTTPS POST request to the Google dynamic DNS API using a PSCredential object to set the subdomain 'www' online
 
 #>
   
-    [CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = "Credential")]
+    [CmdletBinding(SupportsShouldProcess = $true)]
 	Param (
-        [parameter(ParameterSetName='Credential',Mandatory=$true)] [pscredential] $credential,
-		[parameter(ParameterSetName='ManualCredentials',Mandatory=$true)] [string]$generatedUserID,
-		[parameter(ParameterSetName='ManualCredentials',Mandatory=$true)] [string]$generatedPassword,
+        [parameter(Mandatory=$true)] 
+        [pscredential] $credential,
 		[parameter(Mandatory = $true)]
 		[string]$domainName,
 		[parameter(Mandatory = $true)]
@@ -83,12 +74,6 @@ Sends a HTTPS POST request to the Google dynamic DNS API using a PSCredential ob
     begin {
         $webRequestURI = "https://domains.google.com/nic/update"
         $params = @{}
-
-        if ($generatedUserID)
-        {
-            $securePassword = $generatedPassword | ConvertTo-SecureString -asPlainText -Force            
-            $credential =  New-Object System.Management.Automation.PSCredential($generatedUserID,$securePassword)
-        }
     }
 
     process {
