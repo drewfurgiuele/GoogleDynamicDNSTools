@@ -109,34 +109,35 @@ Function Update-GoogleDynamicDNS {
     $response = Invoke-WebRequest -uri $webRequestURI -Method Post -Body $params -Credential $credential 
     $Result = $Response.Content
     $StatusCode = $Response.StatusCode
-
-    if ($Result -like "good*") {
-      $splitResult = $Result.split(" ")
-      $newIp = $splitResult[1]
-      Write-Verbose "IP successfully updated for $subAndDomain to $newIp."
-    }
-    if ($Result -like "nochg*") {
-      $splitResult = $Result.split(" ")
-      $newIp = $splitResult[1]
-      Write-Verbose "No change to IP for $subAndDomain (already set to $newIp)."
-    }
-    if ($Result -eq "badauth") {
-      Throw "The username/password you providede was not valid for the specified host."
-    }
-    if ($Result -eq "nohost") {
-      Throw "The hostname you provided does not exist, or dynamic DNS is not enabled."
-    }
-    if ($Result -eq "notfqdn") {
-      Throw "The supplied hostname is not a valid fully-qualified domain name."
-    }
-    if ($Result -eq "badagent") {
-      Throw "You are making bad agent requests, or are making a request with IPV6 address (not supported)."
-    }
-    if ($Result -eq "abuse") {
-      Throw "Dynamic DNS access for the hostname has been blocked due to failure to interperet previous responses correctly."
-    }
-    if ($Result -eq "911") {
-      Throw "An error happened on Google's end; wait 5 minutes and try again."
+    switch ($Result) {
+      "good*" { 
+        $splitResult = $Result.split(" ")
+        $newIp = $splitResult[1]
+        Write-Verbose "IP successfully updated for $subAndDomain to $newIp."
+      }
+      "nochg*" {
+        $splitResult = $Result.split(" ")
+        $newIp = $splitResult[1]
+        Write-Verbose "No change to IP for $subAndDomain (already set to $newIp)."
+      }
+      "badauth" {
+        throw "The username/password you providede was not valid for the specified host."
+      }
+      "nohost" {
+        throw "The hostname you provided does not exist, or dynamic DNS is not enabled."
+      }
+      "notfqdn" {
+        throw "The supplied hostname is not a valid fully-qualified domain name."
+      }
+      "badagent" {
+        throw "You are making bad agent requests, or are making a request with IPV6 address (not supported)."
+      }
+      "abuse" {
+        throw "Dynamic DNS access for the hostname has been blocked due to failure to interperet previous responses correctly."
+      }
+      "911" {
+        throw "An error happened on Google's end; wait 5 minutes and try again."
+      }
     }
   }
   $response
