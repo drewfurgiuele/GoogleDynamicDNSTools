@@ -63,7 +63,7 @@ Function Update-GoogleDynamicDNS {
     [parameter(Mandatory = $true)]
     [string]$subdomainName,
     [parameter(Mandatory = $false)]
-    [string]$ip,
+    [ipaddress]$ip,
     [parameter(Mandatory = $false)]
     [switch]$offline,
     [parameter(Mandatory = $false)]
@@ -73,33 +73,22 @@ Function Update-GoogleDynamicDNS {
   $webRequestURI = "https://domains.google.com/nic/update"
   $params = @{}
   $splitDomain = $domainName.split(".")
+  
   if ($splitDomain.Length -ne 2) {
     Throw "Please enter a valid top-level domain name (yourdomain.tld)"
   }
+  
   $subAndDomain = $subDomainName + "." + $domainName
   $splitDomain = $subAndDomain.split(".")
+  
   if ($splitDomain.Length -ne 3) {
     Throw "Please enter a valid host and domain name (subdomain.yourdomain.tld)"
   }
+  
   $params.Add("hostname",$subAndDomain)
-
-
-  if ($ip -and !$offline) {
-    $ipValid = $true
-    $splitIp = $ip.split(".")
-    if ($splitIp.length -ne 4) {
-      $ipValid = $false
-    }
-    ForEach ($i in $splitIp) {
-      if ([int] $i -lt 0 -or [int] $i -gt 255) {
-        $ipValid = $false
-      }
-    }
-    if (!$ipValid) {
-      Throw "Please enter a valid IP address"
-    }
-    $params.Add("myip",$ip)
-  } elseif ($offline -and !$online) {
+  $params.Add("myip",$ip.IPAddressToString())
+  
+  if ($offline -and !$online) {
     $params.Add("offline","yes")
   } elseif ($online -and !$offline) {
     $params.Add("offline","no")
