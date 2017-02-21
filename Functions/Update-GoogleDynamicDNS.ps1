@@ -56,11 +56,11 @@ Function Update-GoogleDynamicDNS {
 
   [CmdletBinding(SupportsShouldProcess = $true)]
   param (
-    [parameter(Mandatory=$true)] 
+    [parameter(Mandatory)] 
     [pscredential] $credential,
-    [parameter(Mandatory = $true)]
+    [parameter(Mandatory)]
     [string]$domainName,
-    [parameter(Mandatory = $true)]
+    [parameter(Mandatory)]
     [string]$subdomainName,
     [parameter(Mandatory = $false)]
     [ipaddress]$ip,
