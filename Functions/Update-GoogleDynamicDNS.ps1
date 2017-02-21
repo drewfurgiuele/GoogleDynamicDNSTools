@@ -55,7 +55,7 @@ Function Update-GoogleDynamicDNS {
   #>
 
   [CmdletBinding(SupportsShouldProcess = $true)]
-  Param (
+  param (
     [parameter(Mandatory=$true)] 
     [pscredential] $credential,
     [parameter(Mandatory = $true)]
@@ -75,14 +75,14 @@ Function Update-GoogleDynamicDNS {
   $splitDomain = $domainName.split(".")
   
   if ($splitDomain.Length -ne 2) {
-    Throw "Please enter a valid top-level domain name (yourdomain.tld)"
+    throw "Please enter a valid top-level domain name (yourdomain.tld)"
   }
   
   $subAndDomain = $subDomainName + "." + $domainName
   $splitDomain = $subAndDomain.split(".")
   
   if ($splitDomain.Length -ne 3) {
-    Throw "Please enter a valid host and domain name (subdomain.yourdomain.tld)"
+    throw "Please enter a valid host and domain name (subdomain.yourdomain.tld)"
   }
   
   $params.Add("hostname",$subAndDomain)
