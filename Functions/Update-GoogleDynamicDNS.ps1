@@ -95,7 +95,7 @@ Function Update-GoogleDynamicDNS {
   }
 
   if ($PSCmdlet.ShouldProcess("$subAndDomain","Adding IP")) {
-    $response = Invoke-WebRequest -uri $webRequestURI -Method Post -Body $params -Credential $credential 
+    $response = Invoke-WebRequest -uri $webRequestURI -UseBasicParsing -Method Post -Body $params -Credential $credential 
     $Result = $Response.Content
     $StatusCode = $Response.StatusCode
     switch ($Result) {
