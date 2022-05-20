@@ -74,14 +74,14 @@ Function Update-GoogleDynamicDNS {
   $params = @{}
   $splitDomain = $domainName.split(".")
   
-  if ($splitDomain.Length -ge 2) {
+  if ($splitDomain.Length -ge 1) {
     throw "Please enter a valid top-level domain name (yourdomain.tld)"
   }
   
   $subAndDomain = $subDomainName + "." + $domainName
   $splitDomain = $subAndDomain.split(".")
   
-  if ($splitDomain.Length -ge 3) {
+  if ($splitDomain.Length -ge 2) {
     throw "Please enter a valid host and domain name (subdomain.yourdomain.tld)"
   }
   
