@@ -74,14 +74,14 @@ Function Update-GoogleDynamicDNS {
   $params = @{}
   $splitDomain = $domainName.split(".")
   
-  if ($splitDomain.Length -ne 2) {
+  if ($splitDomain.Length -lt 1) {
     throw "Please enter a valid top-level domain name (yourdomain.tld)"
   }
   
   $subAndDomain = $subDomainName + "." + $domainName
   $splitDomain = $subAndDomain.split(".")
   
-  if ($splitDomain.Length -ne 3) {
+  if ($splitDomain.Length -lt 1) {
     throw "Please enter a valid host and domain name (subdomain.yourdomain.tld)"
   }
   
@@ -95,7 +95,7 @@ Function Update-GoogleDynamicDNS {
   }
 
   if ($PSCmdlet.ShouldProcess("$subAndDomain","Adding IP")) {
-    $response = Invoke-WebRequest -uri $webRequestURI -Method Post -Body $params -Credential $credential 
+    $response = Invoke-WebRequest -uri $webRequestURI -UseBasicParsing -Method Post -Body $params -Credential $credential 
     $Result = $Response.Content
     $StatusCode = $Response.StatusCode
     switch ($Result) {
